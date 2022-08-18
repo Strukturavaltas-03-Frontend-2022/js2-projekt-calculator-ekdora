@@ -1,0 +1,102 @@
+body {
+  margin: 0;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.items-stretch {
+  align-items: stretch;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.justify-end {
+  justify-content: flex-end;
+}
+
+.gap-2 {
+  gap: 0.5rem;
+}
+
+.min-h-screen {
+  min-height: 100vh;
+}
+
+.m-0 {
+  margin: 0;
+}
+
+.m-4 {
+  margin: 1rem;
+}
+
+.w-quarter {
+  width: 25%;
+}
+
+.calc__container {
+  width: 22rem;
+  border: 1px solid lightgrey;
+  padding: 1rem;
+}
+
+.calc__input {
+  width: calc(100% - 2rem - 2px);
+  height: 3rem;
+  border: 1px solid rgb(182, 181, 181);
+  text-align: right;
+  font-size: 1.5rem;
+  padding: 1rem;
+}
+
+.button__nums,
+.button__operations {
+  border: 1px solid rgb(182, 181, 181);
+  font-size: 1.25rem;
+  color: rgb(80, 80, 80);
+  min-height: 2.5rem;
+}
+
+.button__operations {
+  background-color: lightgrey;
+}
+
+.button__nums {
+  background-color: whitesmoke;
+}
+
+.button__result {
+  height: 100%;
+  background-color: dodgerblue;
+  color: white;
+  border: 1px solid rgb(182, 181, 181);
+  font-size: 1.25rem;
+}
+
+.button__nums:hover,
+.button__operations:hover,
+.button__result:hover {
+  cursor: pointer;
+}
+
+@media only screen and (max-width: 560px) {
+  .calc__container {
+    width: 90%;
+  }
+}
