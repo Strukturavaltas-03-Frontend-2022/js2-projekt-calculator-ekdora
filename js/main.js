@@ -1,20 +1,31 @@
-const commonCalcBtnIdPart = 'calc__btn_';
-const calcBtns = document.querySelectorAll(`[id^=${commonCalcBtnIdPart}]`);
+const calcBtns = document.querySelectorAll(`[id^='calc__btn_']`);
 let screenInput = '';
 const calcInput = document.querySelector('#calc__input');
 
-const btnsMap = {
-	sum: '+',
-	zero: 0,
-	one: 1,
-	two: 2,
-	three: 3,
-	four: 4,
-	five: 5,
-	six: 6,
-	seven: 7,
-	eight: 8,
-	nine: 9,
+const doOp = {
+	'+': (a, b) => a + b,
+	'-': (a, b) => a - b,
+	'x': (a, b) => a * b,
+	'/': (a, b) => a / b,
+}
+
+const calcResult = (typedString) => {
+	const typedNums = typedString.split(/\+|-|x|\//);
+	const firstTypedNum = typedNums[0];
+	if(!firstTypedNum) {
+		typedNums[0] = '0';
+	}
+	const typedOps = typedString.split('').filter((char) => ['+', '-', 'x', '/'].includes(char));
+	const nums = typedNums.map((typedNum) => parseFloat(typedNum));
+	let result = 0;
+	console.log(typedNums, typedOps, nums);
+	result = nums[0];
+	for (let i = 1; i < nums.length; i++) {
+		const num = nums[i];
+		result = doOp[typedOps[i - 1]](result, num);
+	}
+
+	return result;
 };
 
 const eventListenerFactory = (htmlElements) => {
@@ -22,11 +33,33 @@ const eventListenerFactory = (htmlElements) => {
 		element.addEventListener(
 			'click',
 			() => {
-				// kiszűrni az = jelet, kiszűrni a C jelet, az egyéb jelek kódja már megvan
-				// if() else if() else
-				const selectedBtnSign = btnsMap[element.id.replace(commonCalcBtnIdPart, '')];
-				screenInput += selectedBtnSign;
-				calcInput.value = screenInput;
+				if (screenInput.length < 24 ) {
+					const selectedBtnSign = element.innerHTML;
+					const prevChar = screenInput?.charAt(screenInput.length - 1);
+					const beforePrevChar = screenInput.length > 1 && screenInput?.charAt(screenInput.length - 2);
+					const lastTwoCharZero = prevChar === '0' && selectedBtnSign === '0';
+					const afterOpMoreZeros = beforePrevChar && /\+|-|x|\//.test(beforePrevChar) && lastTwoCharZero;
+					const afterFirstZeroMoreZeros = screenInput.length === 1 && lastTwoCharZero;
+
+					if (!afterOpMoreZeros && !afterFirstZeroMoreZeros) {
+						if (selectedBtnSign === '=' && /\d/.test(prevChar)) {
+							const result = calcResult(screenInput);
+							screenInput = '';
+							calcInput.value = result;
+						} else if (selectedBtnSign === 'C') {
+							screenInput = '';
+							calcInput.value = '';
+						} else if (selectedBtnSign !== '=') {
+							const hasError = /(\.|\+|-|x|\/)[^0-9]/.test(`${prevChar}${selectedBtnSign}`)
+								|| !screenInput && /\.|\+|x|\//.test(selectedBtnSign);
+							
+							if (!hasError) {
+								screenInput += selectedBtnSign;
+								calcInput.value = screenInput;
+							}
+						};
+					}
+				}
 			}
 		);
 	});
