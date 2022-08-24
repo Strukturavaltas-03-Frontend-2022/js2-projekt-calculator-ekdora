@@ -13,7 +13,7 @@ const calcResult = (typedString) => {
 	const typedNums = typedString.split(/\+|-|x|\//);
 	const firstTypedNum = typedNums[0];
 	if (!firstTypedNum) {
-		firstTypedNum = '0';
+		typedNums[0] = '0';
 	}
 	const typedOps = typedString.split('').filter(char => /\+|-|x|\//.test(char));
 	const nums = typedNums.map((typedNum) => parseFloat(typedNum));
